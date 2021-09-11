@@ -10,15 +10,21 @@ export class UserController {
     }
 
     @Post()
-    async addUser(@Body() createUserDto: CreateuserDto) {
-        const user = await this.userService.insertUser(createUserDto);
-        return user;
+    async create(@Body() createUserDto: CreateuserDto) {
+        const user = await this.userService.create(createUserDto);
+        return {User: user};
     }
 
     @Get()
-    async getUsers() {
-        const users = await this.userService.getUsers();
-        return users;
+    async findAll() {
+        const user = await this.userService.findAll();
+        return {User: user}
+    }
+
+    @Get(':id')
+    async findOne(@Param('id') id:String){
+        const user= await this.userService.findOne(id);
+        return {User: user}
     }
 
     @Patch(':id')
@@ -27,10 +33,22 @@ export class UserController {
         return updatedUser;
     }
 
+    @Patch('/follow/:follwerId/:followId')
+    async follow(@Param('follwerId') follwerId: String,@Param('followId') followId: String){
+        const user=await this.userService.follow(follwerId,followId);
+        return user;
+    }
+
+    @Patch('/unfollow/:follwerId/:followId')
+    async unfollow(@Param('follwerId') follwerId: String,@Param('followId') followId: String){
+        const user=await this.userService.unfollow(follwerId,followId);
+        return user;
+    }
+
     @Delete(':id')
     async delete(@Param('id') id: String) {
-        const deletedUser = await this.userService.deleteUser(id);
-        return deletedUser;
+        const user = await this.userService.delete(id);
+        return {User: user}
     }
 
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreatePostDto } from "src/dto/create-post.dto";
@@ -13,34 +13,66 @@ export class PostService {
         @InjectModel('Users') private readonly userModel: Model<User>) {
     }
 
-    async insertPost(post: CreatePostDto) {
-        //const user= await this.userModel.findOne({"_id": "613aced1b33490266bc0cb9f"}) ;
+    async create(post: CreatePostDto) {
         const newPost = new this.postModel(post);
         const NewPost = await newPost.save();
         console.log(NewPost);
         return NewPost;
     }
 
-    async getPost() {
-        const posts = await this.postModel.find().exec();
-        return posts;
+    async findAll(offset: string, limit: string) {
+        try {
+            const posts = await this.postModel.find()
+                .skip(parseInt(offset))
+                .limit(parseInt(limit)).exec(); 
+
+            if (posts.length===0)
+                throw new HttpException('Out of range index', HttpStatus.NOT_FOUND)
+            else
+                return posts;
+        }
+        catch (err) {
+            throw new HttpException('Posts not found', HttpStatus.NOT_FOUND)
+        }
     }
 
     async update(id: String, updatePostDto: UpdatePostDto) {
-        const updatedPost = await this.postModel.findById(id).exec();
-        if (updatePostDto.title) {
-            updatedPost.title = updatePostDto.title
+        try {
+            const updatedPost = await this.postModel.findById(id).exec();
+            if (updatePostDto.title) {
+                updatedPost.title = updatePostDto.title
+            }
+            if (updatePostDto.description) {
+                updatedPost.description = updatePostDto.description
+            }
+            updatedPost.save();
+            return updatedPost;
         }
-        if (updatePostDto.description) {
-            updatedPost.description = updatePostDto.description
+        catch (err) {
+            throw new HttpException('Posts not found', HttpStatus.NOT_FOUND)
         }
-        updatedPost.save();
-        return updatedPost;
     }
 
-    async deletePost(id: String) {
-        const result = await this.postModel.deleteOne({ _id: id }).exec();
-        return result;
+    async delete(id: String) {
+            const result = await this.postModel.deleteOne({ _id: id }).exec(); 
+            if(result.deletedCount===0)
+                throw new HttpException('Post not found', HttpStatus.NOT_FOUND)
+            else
+                return result;
+    }
+
+    async findOne(id: String) {
+        try {
+            const post = await this.postModel.find({ _id: id });
+            if (post.length===0)
+                throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+            else
+                return post;
+        }
+        catch (err) {
+            throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }
