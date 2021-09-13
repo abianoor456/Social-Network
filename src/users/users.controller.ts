@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards } from "@nestjs/common";
 import { AuthService } from "src/auth/auth.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { LocalAuthGuard } from "src/auth/guards/local-auth.guard";
@@ -27,13 +27,13 @@ export class UserController {
         return { User: user }
     }
 
-    // @Get(':email')
-    // async findOne(@Param('email') email: String) {
-    //     const user = await this.userService.findOne(email);
-    //     return { User: user }
-    // }
+    @Get('/getOne/:email')
+    async findOne(@Param('email') email: String) {
+        const user = await this.userService.findOne(email);
+        return { User: user }
+    }
 
-    @Patch(':id')
+    @Put(':id')
     async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         const updatedUser = await this.userService.update(id, updateUserDto);
         return updatedUser;
@@ -66,7 +66,7 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('profilee')
+    @Get('/profile')
     getProfile(@Request() req) {
         return req.user
     }

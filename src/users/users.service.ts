@@ -29,16 +29,7 @@ export class UserService {
 
     async update(id: String, updateUserDto: UpdateUserDto) {
         try {
-            const updatedUser = await this.userModel.findById(id).exec();
-            if (updateUserDto.firstName) {
-                updatedUser.firstName = updateUserDto.firstName;
-            }
-            if (updateUserDto.lastName) {
-                updatedUser.lastName = updateUserDto.lastName;
-            }
-            if (updateUserDto.password) {
-                updatedUser.password = updateUserDto.password;
-            }
+            const updatedUser = await this.userModel.findByIdAndUpdate(id, updateUserDto);
             updatedUser.save();
             return updatedUser;
         }
