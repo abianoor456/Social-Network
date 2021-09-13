@@ -4,10 +4,11 @@ import { UserSchema } from "./users.model";
 import { UserController } from "./users.controller";
 import { UserService } from "./users.service";
 import { PostScehma } from "src/posts/posts.model";
+import { AuthModule } from "src/auth/auth.module";
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: 'Users', schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: 'Posts', schema: PostScehma }])],
+    imports: [AuthModule, MongooseModule.forFeature([{ name: 'Users', schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: 'Posts', schema: PostScehma }]) ],
     controllers: [UserController],
     providers: [UserService]
 })

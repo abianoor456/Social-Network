@@ -63,6 +63,9 @@ export class PostService {
 
     async findOne(id: String) {
         try {
+            const users= await this.userModel.find();
+            console.log(users);
+
             const post = await this.postModel.find({ _id: id });
             if (post.length===0)
                 throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
