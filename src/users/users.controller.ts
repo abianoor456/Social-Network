@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards } from "@nestjs/common";
+import { get } from "http";
 import { AuthService } from "src/auth/auth.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { LocalAuthGuard } from "src/auth/guards/local-auth.guard";
@@ -71,5 +72,11 @@ export class UserController {
         return req.user
     }
 
+    @Get('/posts/:id')
+    async gtePosts(@Param('id') id: String){
+        const posts= await this.userService.feed(id)
+        console.log('posts at controlelr',posts)
+        return posts;
+    }
 
 }

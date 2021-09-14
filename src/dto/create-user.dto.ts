@@ -5,5 +5,4 @@ export class CreateuserDto {
     readonly lastName: string;
     readonly email: string;
     readonly password: string;
-    readonly followers: User[];
 }

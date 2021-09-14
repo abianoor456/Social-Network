@@ -61,6 +61,10 @@ export class PostService {
                 return result;
     }
 
+    async deleteUserPosts(user: User){
+        const result= await this.postModel.deleteMany({user: user}).exec();
+    }
+
     async findOne(id: String) {
         try {
             const users= await this.userModel.find();
@@ -76,6 +80,11 @@ export class PostService {
             throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    async userPosts(user:User){
+        const posts= await this.postModel.find({user:user})
+        return posts;
     }
 
 }

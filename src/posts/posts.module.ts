@@ -9,7 +9,8 @@ import { UserSchema } from "src/users/users.model";
     imports: [MongooseModule.forFeature([{ name: 'Posts', schema: PostScehma }]),
     MongooseModule.forFeature([{ name: 'Users', schema: UserSchema }])],
     controllers: [PostController],
-    providers: [PostService]
+    providers: [PostService],
+    exports:[PostService]
 })
 
 export class PostModule { }
