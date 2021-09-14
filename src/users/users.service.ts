@@ -94,7 +94,16 @@ export class UserService {
                 { _id: toFollow },
                 { $push: { followers: follower } }
              )
+             this.userModel.update(
+                 {_id: followerId},
+                 {$push:{following:tofollow}}
+             )
             tofollow.save();
+            follower.save();
+            console.log(`${followerId} is following ${toFollow}`)
+            console.log('the follower was',follower);
+            console.log('followed: ',tofollow);
+            
             return tofollow;
         }
         else {
@@ -119,11 +128,19 @@ export class UserService {
                 tofollow.followers.splice(index, 1)
             };
         });
+
+        follower.following.forEach((item, index) => {
+            if (item.toString() === tofollow._id.toString()){ 
+                tofollow.followers.splice(index, 1)
+            };
+        });
+
         tofollow.save();
-        console.log(tofollow);
+        follower.save();
+        console.log(`${followerId} is unfollowing ${toFollow}`)
+        console.log('the follower was',follower);
+        console.log('unfollowed: ',tofollow);
         return tofollow;
     }
-
-
    
 }

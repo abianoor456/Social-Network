@@ -12,12 +12,12 @@ import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
-    
+    forwardRef(() =>UserModule),
     MongooseModule.forFeature([{ name: 'Users', schema: UserSchema }]),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '600000s' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

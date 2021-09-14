@@ -5,7 +5,8 @@ export const UserSchema= new mongoose.Schema({
     lastName: {type: String, required: true},
     email: {required: true, type: String, unique: true},
     password:{required: true, type: String},
-    followers:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Users'}]
+    followers:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Users'}],
+    following:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Users'}]
 },
 {
     timestamps: true
@@ -18,4 +19,5 @@ export interface User extends mongoose.Document{
      email: String,
      password: String,
      followers: User[]
+     following: User[]
 }

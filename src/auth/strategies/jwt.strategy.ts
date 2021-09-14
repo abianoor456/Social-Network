@@ -15,6 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     console.log(`validate in jwt stratagey called: ${payload}`)
-    return { userId: payload.id, username: payload.username };
+    return { userId: payload.id, username: payload.email };
   }
 }
