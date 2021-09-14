@@ -82,9 +82,10 @@ export class PostService {
 
     }
 
-    async userPosts(user:User){
-        const posts= await this.postModel.find({user:user})
+    async userPosts(followers:User[]){
+        const posts= await this.postModel.find({user:{$in:followers }}).populate('user')
         return posts;
     }
+
 
 }

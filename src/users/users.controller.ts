@@ -23,7 +23,6 @@ export class UserController {
 
     @Get()
     async findAll() {
-        
         const user = await this.userService.findAll();
         return { User: user }
     }
@@ -72,10 +71,9 @@ export class UserController {
         return req.user
     }
 
-    @Get('/posts/:id')
-    async gtePosts(@Param('id') id: String){
+    @Get('/feed/:id')
+    async feed(@Param('id') id: String){
         const posts= await this.userService.feed(id)
-        console.log('posts at controlelr',posts)
         return posts;
     }
 

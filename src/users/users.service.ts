@@ -12,7 +12,7 @@ import { User } from "./users.model";
 export class UserService {
 
     constructor(@InjectModel('Users') private readonly userModel: Model<User>,
-       private postService: PostService
+        private postService: PostService
     ) {
     }
 
@@ -69,35 +69,34 @@ export class UserService {
         }
     }
 
-    
 
-    async follow(followerId: String, toFollow: String){
-        await this.userModel.updateOne({_id:followerId},{
-            $push:{following:toFollow}
-        })
-        
-    }
 
-    async unfollow(followerId: String, toFollow: String){
-       await this.userModel.updateOne({_id:followerId},{
-            $pull:{following:toFollow}
+    async follow(followerId: String, toFollow: String) {
+        await this.userModel.updateOne({ _id: followerId }, {
+            $push: { following: toFollow }
         })
 
     }
-    
 
-    async feed(id: String){
-        
+    async unfollow(followerId: String, toFollow: String) {
+        await this.userModel.updateOne({ _id: followerId }, {
+            $pull: { following: toFollow }
+        })
+    }
+
+
+    async feed(id: String) {
         const user = await this.userModel.findById(id);
         console.log(user);
-        let posts :Post[];
-        posts=[]
-          return await Promise.all (user.following.map(async (item, index)=>{
-            const userPosts= await this.postService.userPosts(item);
-            posts.push(...userPosts);
-            return userPosts;
-          })
-          )
+        
+        const posts = await this.postService.userPosts(user.following);
+        return posts
+         
     }
+
+
+//   async getProfile(id: ObjectId): Promise<User> {
+//     return await this.userModel.findById(id, { password: 0 })
+//   }
 
 }

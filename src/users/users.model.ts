@@ -5,7 +5,6 @@ export const UserSchema= new mongoose.Schema({
     lastName: {type: String, required: true},
     email: {required: true, type: String, unique: true},
     password:{required: true, type: String},
-
     following:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Users'}]
 },
 {
