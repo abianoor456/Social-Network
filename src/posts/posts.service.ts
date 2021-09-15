@@ -37,13 +37,7 @@ export class PostService {
 
     async update(id: String, updatePostDto: UpdatePostDto) {
         try {
-            const updatedPost = await this.postModel.findById(id).exec();
-            if (updatePostDto.title) {
-                updatedPost.title = updatePostDto.title
-            }
-            if (updatePostDto.description) {
-                updatedPost.description = updatePostDto.description
-            }
+            const updatedPost = await this.postModel.findByIdAndUpdate(id, updatePostDto);
             updatedPost.save();
             return updatedPost;
         }
