@@ -25,6 +25,7 @@ export class UserService {
 
     async findAll() {
         const users = await this.userModel.find().exec();
+        
         return users;
     }
 
@@ -41,12 +42,12 @@ export class UserService {
 
     async delete(id: String) {
         try {
-            const userId = await this.userModel.findById(id).exec();
+            const user = await this.userModel.findById(id).exec();
+            
             const result = await this.userModel.deleteOne({ _id: id }).exec();
             if (result.deletedCount === 0)
                 throw new HttpException('User not found', HttpStatus.NOT_FOUND)
             else {
-                await this.postService.deleteUserPosts(userId);
                 return result;
             }
         }
@@ -59,6 +60,22 @@ export class UserService {
         try {
             console.log(email)
             const result = await this.userModel.find({ email: email }).exec();
+            console.log(result)
+            if (result === [])
+                throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
+            else
+                return result;
+        }
+        catch (err) {
+            throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    async getPassword(email: String) {
+        try {
+            console.log(email)
+            const result = await this.userModel.find({ email: email }).select("password")
+            console.log(result);
             if (result === null)
                 throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
             else
@@ -85,18 +102,10 @@ export class UserService {
     }
 
 
-    async feed(id: String) {
-        const user = await this.userModel.findById(id);
-        console.log(user);
-        
-        const posts = await this.postService.userPosts(user.following);
+    async feed(user: any,  offset: string, limit: string) {  
+        const posts = await this.postService.userPosts(user.following, offset,limit);
         return posts
-         
     }
 
-
-//   async getProfile(id: ObjectId): Promise<User> {
-//     return await this.userModel.findById(id, { password: 0 })
-//   }
 
 }

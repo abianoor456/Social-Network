@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards,Query } from "@nestjs/common";
 import { get } from "http";
+
 import { AuthService } from "src/auth/auth.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { LocalAuthGuard } from "src/auth/guards/local-auth.guard";
@@ -71,9 +72,11 @@ export class UserController {
         return req.user
     }
 
-    @Get('/feed/:id')
-    async feed(@Param('id') id: String){
-        const posts= await this.userService.feed(id)
+    @UseGuards(JwtAuthGuard)
+    @Get('/feed')
+    async feed(@Request() req,@Query('offset') offset: string, @Query('limit') limit: string){
+        console.log('in feed controller',req.user);
+        const posts= await this.userService.feed(req.user,offset,limit)
         return posts;
     }
 

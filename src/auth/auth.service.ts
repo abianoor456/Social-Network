@@ -18,7 +18,7 @@ export class AuthService {
     console.log(`validate user called ${username}`)
     
       //const user= await this.userModel.find({email: username});
-      const user= await this.userService.findOne(username);
+      const user= await this.userService.getPassword(username)
       console.log(user[0])
 
     
@@ -29,13 +29,14 @@ export class AuthService {
      return null;
    }
 
-   async validateuser(email: String){
+   async validateuser(email: String) :Promise<User> {
     const user= await this.userService.findOne(email);
+    console.log(`in validate user: ${user}`)
     if(user[0]){
-      return true
+      return user[0]
     }
     else{
-      return false
+      return null
     }
 
    }
