@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards,Query } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { get } from "http";
 
 import { AuthService } from "src/auth/auth.service";
@@ -37,19 +38,19 @@ export class UserController {
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         const updatedUser = await this.userService.update(id, updateUserDto);
-        return updatedUser;
+        return { User: updatedUser };
     }
 
     @Patch('/follow/:follwerId/:followId')
     async follow(@Param('follwerId') follwerId: String, @Param('followId') followId: String) {
         const user = await this.userService.follow(follwerId, followId);
-        return user;
+        return { User: user };
     }
 
     @Patch('/unfollow/:follwerId/:followId')
     async unfollow(@Param('follwerId') follwerId: String, @Param('followId') followId: String) {
         const user = await this.userService.unfollow(follwerId, followId);
-        return user;
+        return { User: user };
     }
 
     @Delete(':id')
@@ -67,6 +68,7 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     @Get('/profile')
     getProfile(@Request() req) {
         return req.user
@@ -74,9 +76,10 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/feed')
-    async feed(@Request() req,@Query('offset') offset: string, @Query('limit') limit: string){
+    @ApiBearerAuth()
+    async feed(@Request() req,@Query('offset') offset: string, @Query('limit') limit: string,@Query('query') query: string){
         console.log('in feed controller',req.user);
-        const posts= await this.userService.feed(req.user,offset,limit)
+        const posts= await this.userService.feed(req.user,offset,limit,query)
         return posts;
     }
 

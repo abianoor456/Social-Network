@@ -1,4 +1,4 @@
-import { Body, Get, Controller, Post, Patch, Param, Delete ,Query} from "@nestjs/common";
+import { Body, Get, Controller, Post, Patch, Param, Delete ,Query, Put} from "@nestjs/common";
 import { get } from "http";
 import { CreatePostDto } from "src/dto/create-post.dto";
 import { UpdatePostDto } from "src/dto/update-post.dto";
@@ -29,7 +29,7 @@ export class PostController {
         return {Post: post};
     }
 
-    @Patch(':id')
+    @Put(':id')
     async update(@Param('id') id: string, @Body() updatepostDto: UpdatePostDto) {
         const post = await this.postService.update(id, updatepostDto);
         return {Post: post};

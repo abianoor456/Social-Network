@@ -69,12 +69,10 @@ export class PostService {
 
     }
 
-    async userPosts(following: ObjectId[], offset: string, limit: string) {
+    async userPosts(following: ObjectId[], offset: string, limit: string, searchQuery: string) {
 
-        // const s = 'blue'
-        // const regex = new RegExp(s, 'i')
-        const posts = await  this.postModel
-            .find({ user: { $in: following }, /*title: { $regex: regex }*/})
+        const posts = await this.postModel
+            .find({ user: { $in: following }, $text: {$search: searchQuery}})
             .skip(parseInt(offset))
             .limit(parseInt(limit))
             .populate('user', '-_id');

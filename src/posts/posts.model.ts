@@ -38,4 +38,6 @@ export class Post{
     
 }
 
+
 export const PostScehma = SchemaFactory.createForClass(Post);
+export const index= PostScehma.index({'$**': 'text'});

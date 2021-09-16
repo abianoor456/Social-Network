@@ -102,8 +102,8 @@ export class UserService {
     }
 
 
-    async feed(user: any,  offset: string, limit: string) {  
-        const posts = await this.postService.userPosts(user.following, offset,limit);
+    async feed(user: any,  offset: string, limit: string, searchQuery: string) {  
+        const posts = await this.postService.userPosts(user.following, offset,limit, searchQuery);
         return posts
     }
 
