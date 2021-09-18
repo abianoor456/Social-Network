@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { User } from "src/users/users.model";
 
 export class CreateuserDto {
@@ -5,4 +6,5 @@ export class CreateuserDto {
     readonly lastName: string;
     readonly email: string;
     readonly password: string;
+   
 }

@@ -29,11 +29,11 @@ export class AuthService {
      return null;
    }
 
-   async validateuser(email: String) :Promise<User> {
+   async validateuser(email: String)  {
     const user= await this.userService.findOne(email);
     console.log(`in validate user: ${user}`)
     if(user[0]){
-      return user[0]
+      return {User:user[0], id:user[0]._id}
     }
     else{
       return null
@@ -43,7 +43,7 @@ export class AuthService {
 
   async login(user: any) {
     console.log(user)
-    const payload = { email: user.email, id: user.id };
+    const payload = { email: user.email };
     console.log(payload)
     return {
       access_token: this.jwtService.sign(payload),

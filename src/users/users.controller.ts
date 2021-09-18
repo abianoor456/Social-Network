@@ -1,16 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards,Query } from "@nestjs/common";
 import { ApiBearerAuth } from "@nestjs/swagger";
-import { get } from "http";
-
 import { AuthService } from "src/auth/auth.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { LocalAuthGuard } from "src/auth/guards/local-auth.guard";
-
 import { CreateuserDto } from "src/dto/create-user.dto";
 import { LoginUserDto } from "src/dto/login-user.dto";
 import { UpdateUserDto } from "src/dto/update-user.dto";
-import { User } from "./users.model";
 import { UserService } from "./users.service";
+import { io } from 'socket.io-client';
 
 @Controller('users')
 export class UserController {
@@ -44,6 +41,10 @@ export class UserController {
     @Patch('/follow/:follwerId/:followId')
     async follow(@Param('follwerId') follwerId: String, @Param('followId') followId: String) {
         const user = await this.userService.follow(follwerId, followId);
+       
+        const  socket = io('http://localhost:3000')
+        socket.emit('room', followId)
+        
         return { User: user };
     }
 

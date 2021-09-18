@@ -58,7 +58,7 @@ export class UserService {
 
     async findOne(email: String) {
         try {
-            console.log(email)
+           
             const result = await this.userModel.find({ email: email }).exec();
             console.log(result)
             if (result === [])
@@ -92,6 +92,9 @@ export class UserService {
         await this.userModel.updateOne({ _id: followerId }, {
             $push: { following: toFollow }
         })
+        await this.userModel.updateOne({ _id: toFollow }, {
+            $push: { followers: followerId }
+        })
 
     }
 
@@ -99,12 +102,16 @@ export class UserService {
         await this.userModel.updateOne({ _id: followerId }, {
             $pull: { following: toFollow }
         })
+
+        await this.userModel.updateOne({ _id: toFollow }, {
+            $pull: { followers: followerId }
+        })
     }
 
 
     async feed(user: any,  offset: string, limit: string, searchQuery: string) {  
         const posts = await this.postService.userPosts(user.following, offset,limit, searchQuery);
-        return posts
+        return [posts, user.userId]
     }
 
 
