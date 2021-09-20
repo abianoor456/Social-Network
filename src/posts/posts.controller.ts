@@ -18,7 +18,7 @@ export class PostController {
         createPostDto.user= req.user.userId;
         const post = await this.postService.create(createPostDto);
         if (post) {
-             const socket = io('http://localhost:3000')
+             const socket = io()
              const payload={Post:post, User: req.user}
              socket.emit('msgToServer',payload )
             return { Post: post };
