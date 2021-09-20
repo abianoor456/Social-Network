@@ -7,7 +7,6 @@ import { CreateuserDto } from "src/dto/create-user.dto";
 import { LoginUserDto } from "src/dto/login-user.dto";
 import { UpdateUserDto } from "src/dto/update-user.dto";
 import { UserService } from "./users.service";
-import { io } from 'socket.io-client';
 
 @Controller('users')
 export class UserController {
