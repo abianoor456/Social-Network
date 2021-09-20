@@ -1,37 +1,54 @@
-import { Body, Get, Controller, Post, Patch, Param, Delete } from "@nestjs/common";
-import { get } from "http";
+import { Body, Get, Controller, Post, Patch, Param, Delete, Query, Put, UnauthorizedException, UseGuards, Request } from "@nestjs/common";
 import { CreatePostDto } from "src/dto/create-post.dto";
 import { UpdatePostDto } from "src/dto/update-post.dto";
-import { UpdateUserDto } from "src/dto/update-user.dto";
-import { User } from "src/users/users.model";
 import { PostService } from "./posts.service";
+import { io } from 'socket.io-client';
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller('posts')
 export class PostController {
     constructor(private readonly postService: PostService) {
     }
 
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     @Post()
-    async addPost(@Body() createPostDto: CreatePostDto) {
-        const post = await this.postService.insertPost(createPostDto);
-        return post;
+    async create(@Body() createPostDto: CreatePostDto, @Request() req) {
+        createPostDto.user= req.user.userId;
+        const post = await this.postService.create(createPostDto);
+        if (post) {
+             const socket = io('http://localhost:3000')
+             const payload={Post:post, User: req.user}
+             socket.emit('msgToServer',payload )
+            return { Post: post };
+        }
+        else {
+            throw new UnauthorizedException();
+        }
     }
 
     @Get()
-    async getPosts() {
-        const posts = await this.postService.getPost();
-        return posts;
+    async findAll(@Query('offset') offset: string, @Query('limit') limit: string) {
+        const post = await this.postService.findAll(offset, limit);
+        return { Post: post };
     }
 
-    @Patch(':id')
+    @Get(':id')
+    async findOne(@Param('id') id: String) {
+        const post = await this.postService.findOne(id);
+        return { Post: post };
+    }
+
+    @Put(':id')
     async update(@Param('id') id: string, @Body() updatepostDto: UpdatePostDto) {
-        const updatedPost = await this.postService.update(id, updatepostDto);
-        return updatedPost;
+        const post = await this.postService.update(id, updatepostDto);
+        return { Post: post };
     }
 
     @Delete(':id')
     async delete(@Param('id') id: String) {
-        const deletedPost = await this.postService.deletePost(id);
-        return deletedPost;
+        const post = await this.postService.delete(id);
+        return { Post: post };
     }
 }
