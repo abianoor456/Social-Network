@@ -12,10 +12,18 @@
     <title>Feed</title>
 </head>
 
+
+
 <body>
+    
     <h1>Posts:</h1>
 
     <div id="app">
+        <form>
+            <input v-model="email" type="text" >
+            <input v-model="password" type="text" >
+            <button type="submit" @click.prevent="login()" >Submit</button>
+        </form>
         <ul id="example-1">
             <li v-for="item in posts">
                 {{ item }}

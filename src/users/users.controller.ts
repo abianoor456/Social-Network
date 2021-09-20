@@ -41,9 +41,6 @@ export class UserController {
     @Patch('/follow/:follwerId/:followId')
     async follow(@Param('follwerId') follwerId: String, @Param('followId') followId: String) {
         const user = await this.userService.follow(follwerId, followId);
-       
-        const  socket = io('http://localhost:3000')
-        socket.emit('room', followId)
         
         return { User: user };
     }
