@@ -67,8 +67,5 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         console.log('USER LOGGED IN: SOCKETID: ')
         console.log(this.activeUsers.get(id))
     }
-
-    
-
     
 }

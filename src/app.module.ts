@@ -10,7 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 
 @Module({
-  imports: [  EventsModule, UserModule, AuthModule,PostModule,  ConfigModule.forRoot({ isGlobal: true }), MongooseModule.forRoot(`mongodb://localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`)],
+  imports: [  EventsModule, UserModule, AuthModule,PostModule,  ConfigModule.forRoot({ isGlobal: true }), MongooseModule.forRoot(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@nestjs-demo.kowsp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)],
   controllers: [AppController],
   providers: [AppService],
 })  
