@@ -31,7 +31,7 @@ var app = new Vue({
             console.log(email)
             console.log(password)
 
-            let login = await fetch('http://localhost:3000/users/login', {
+            let login = await fetch('/users/login', {
                 method: 'post',
                 headers: new Headers({
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ var app = new Vue({
             this.token = login['access_token']
             console.log(`token: ${this.token}`)
 
-            let feed = await fetch('http://localhost:3000/users/feed/?offset=0&limit=5&query=dummy', {
+            let feed = await fetch('/users/feed/?offset=0&limit=5&query=dummy', {
                 method: 'get',
                 headers: new Headers({
                     Authorization: 'Bearer ' + this.token,
@@ -65,7 +65,7 @@ var app = new Vue({
     async created() {
         console.log('created')
 
-        this.socket = io('http://localhost:3000')
+        this.socket = io()
         this.socket.on('msgToClient', (post) => {
             console.log('post Recieved:', post)
             this.addPost(post)
