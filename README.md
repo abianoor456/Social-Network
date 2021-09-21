@@ -55,16 +55,17 @@ $ npm run start:prod
 
 
 ## Database Design
-1. This is relational database design
-2. Models are defined in each controllers
 
 ![](./docs/schema.png)
 
 ## Architecture Design
-1. This is relational database design
-2. Models are defined in each controllers
 
 ![](./docs/architechture.png)
+
+
+## FLow chart
+
+![](./docs/flowchart.png)
 
 ## Support
 
