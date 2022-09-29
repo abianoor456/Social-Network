@@ -15,12 +15,12 @@ export class PostController {
     @Post()
     async create(@Body() createPostDto: CreatePostDto, @Request() req) {
         createPostDto.user= req.user.userId;
-        const newPost = await this.postService.create(createPostDto);
-        if (newPost) {
+        const post = await this.postService.create(createPostDto);
+        if (post) {
              const socket = io()
-             const payload={Post:newPost, User: req.user}
+             const payload={Post:post, User: req.user}
              socket.emit('msgToServer',payload )
-            return { Post: newPost };
+            return { Post: post };
         }
         else {
             throw new UnauthorizedException();
